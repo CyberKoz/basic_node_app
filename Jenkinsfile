@@ -1,9 +1,12 @@
-node {
- git 'https://github.com/cyberkoz/basic_node_app/'
- stage('Token Sleep') {
- 			  kubernetes.pod('buildpod').withImage('centos:7').inside {
-			    sh 'echo "Hello World!"'
-			    sh 'sleep 10'
-			  }
- }
+podTemplate(cloud:'minikube', label: 'buildpod', containers: [
+    containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62-alpine', args: '${computer.jnlpmac} ${computer.name}'),
+    containerTemplate(name: 'centos', image: 'centos:7', ttyEnabled: true, command: '/usr/bin/cat')
+]) {
+    node('buildpod') {
+        stage('Run shell') {
+            container('centos') {
+                sh 'echo "hello world!!!"'
+            }
+        }
+    }
 }
