@@ -5,7 +5,7 @@ podTemplate(cloud:'minikube', label: 'buildpod', containers: [
     node('buildpod') {
         stage('Run shell') {
             container('centos') {
-                sh 'echo "hello world!!!"'
+                sh 'sleep 10; echo "hello world!!!"'
             }
         }
     }
